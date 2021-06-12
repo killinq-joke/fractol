@@ -4,7 +4,7 @@ SRCS	=	main.c
 OBJS	=	$(SRCS:c=o)
 NAME	=	fdf
 
-.PHONY: all
+.PHONY:		all
 all		:	$(NAME)
 
 $(NAME):	$(OBJS)
@@ -13,3 +13,10 @@ $(NAME):	$(OBJS)
 %.o:	%.c
 	$(CC) $(CFLAGS) -c $<
 
+clean:
+	$(RM) $(OBJS)
+
+fclean:		clean
+	$(RM) $(NAME)
+
+re:		fclean all
