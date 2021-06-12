@@ -3,20 +3,27 @@ CFLAGS	=	-Wall -Wextra -Werror
 SRCS	=	main.c
 OBJS	=	$(SRCS:c=o)
 NAME	=	fdf
+LIB		=	libft.a
 
-.PHONY:		all
-all		:	$(NAME)
+.PHONY:	all
+all:	$(LIB) $(NAME)
+
+$(LIB):
+	make -C libft/
+	mv libft/$(LIB) .
 
 $(NAME):	$(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIB)  -o $(NAME)
 
 %.o:	%.c
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -c $< -Ilibft/
 
 clean:
-	$(RM) $(OBJS)
+	make -C libft/ clean
+	$(RM) $(OBJS) $(LIB)
 
 fclean:		clean
+	make -C libft/ fclean
 	$(RM) $(NAME)
 
 re:		fclean all
