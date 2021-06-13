@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/12 21:04:30 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/06/13 21:35:56 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/06/13 21:54:39 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,18 +57,37 @@ void	print_grid(t_image *fractol, t_mlx *utils, t_display *display)
 	}
 }
 
+void	print_circle(t_image *img, t_display *display)
+{
+	int	x;
+	int	y;
+
+	y = display->yupbound;
+	while (y < display->ydownbound)
+	{
+		x = display->xleftbound;
+		while (x < display->xrightbound)
+		{
+			ft_putpixel(img, x, y, 0x00FF0000);
+			x++;
+		}
+		y++;
+	}
+}
+
 int		render(t_params *params)
 {
 	print_grid(params->fractol, params->utils, params->display);
-	printf("xleft = %d, xright = %d\n", params->display->xleftbound, params->display->xrightbound);
-	for(int i = 0; i < 100; i++)
-		ft_putpixel(params->fractol, params->display->xleftbound, params->display->ymid + i, 0x000000FF);
-	for(int i = 0; i < 100; i++)
-		ft_putpixel(params->fractol, params->display->xrightbound, params->display->ymid + i, 0x000000FF);
-	for(int i = 0; i < 100; i++)
-		ft_putpixel(params->fractol, params->display->xmid + i, params->display->yupbound, 0x000000FF);
-	for(int i = 0; i < 100; i++)
-		ft_putpixel(params->fractol, params->display->xmid + i, params->display->ydownbound, 0x000000FF);
+	// printf("xleft = %d, xright = %d\n", params->display->xleftbound, params->display->xrightbound);
+	// for(int i = 0; i < 100; i++)
+	// 	ft_putpixel(params->fractol, params->display->xleftbound, params->display->ymid + i, 0x000000FF);
+	// for(int i = 0; i < 100; i++)
+	// 	ft_putpixel(params->fractol, params->display->xrightbound, params->display->ymid + i, 0x000000FF);
+	// for(int i = 0; i < 100; i++)
+	// 	ft_putpixel(params->fractol, params->display->xmid + i, params->display->yupbound, 0x000000FF);
+	// for(int i = 0; i < 100; i++)
+	// 	ft_putpixel(params->fractol, params->display->xmid + i, params->display->ydownbound, 0x000000FF);
+	// print_circle(params->fractol, params->display);
 	mlx_put_image_to_window(params->utils->mlx, params->utils->win, params->fractol->img, 0, 0);
 	return (1);
 }
