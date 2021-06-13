@@ -2,7 +2,7 @@ CC		=	gcc
 CFLAGS	=	-Wall -Wextra -Werror
 SRCS	=	main.c
 OBJS	=	$(SRCS:c=o)
-NAME	=	fdf
+NAME	=	fractol
 LIB		=	libft.a
 
 .PHONY:	all
@@ -13,7 +13,7 @@ $(LIB):
 	mv libft/$(LIB) .
 
 $(NAME):	$(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIB)  -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIB) -lmlx -framework OpenGL -framework AppKit  -o $(NAME)
 
 %.o:	%.c
 	$(CC) $(CFLAGS) -c $< -Ilibft/
@@ -27,3 +27,5 @@ fclean:		clean
 	$(RM) $(NAME)
 
 re:		fclean all
+
+bonus:
