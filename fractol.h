@@ -16,6 +16,26 @@
 # include "libft.h"
 # include "math.h"
 # include "mlx.h"
+# include <stdio.h>
+
+typedef struct	s_mlx {
+	void	*mlx;
+	void	*win;
+}				t_mlx;
+
+typedef struct	s_image {
+	int		bpp;
+	int		size_line;
+	int		endian;
+	void	*img;
+	char	*data;
+}				t_image;
+
+typedef struct	s_params
+{
+	t_image	*fractol;
+	t_mlx	*utils;
+}				t_params;
 
 
 #endif
