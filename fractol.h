@@ -35,8 +35,13 @@ typedef struct	s_image {
 
 typedef struct	s_display
 {
-	int	x;
-	int	y;
+	int	xleftbound;
+	int	xmid;
+	int	xrightbound;
+	int	yupbound;
+	int	ymid;
+	int	ydownbound;
+	int	graduationlen;
 }				t_display;
 
 

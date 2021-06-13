@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/12 21:04:30 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/06/13 21:00:11 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/06/13 21:35:56 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,43 +28,47 @@ void	ft_putpixel(t_image *img, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-void	print_grid(t_image *fractol, t_mlx *utils)
+void	print_grid(t_image *fractol, t_mlx *utils, t_display *display)
 {
-	int	x;
-	int	y;
 	int	i;
 	int	j;
 
 	i = 0;
-	x = utils->winx / 2;
-	y = utils->winy / 2;
-
 	while (i++ < utils->winx)
 	{
-		ft_putpixel(fractol, i, y, 0x00FFFFFF);
+		ft_putpixel(fractol, i, display->ymid, 0x00FFFFFF);
 		j = -5;
-		if ((i - x) % 200 == 0)
+		if ((i - display->xmid) % display->graduationlen == 0)
 		{
 			while (j++ < 5)
-				ft_putpixel(fractol, i, y + j, 0x00FF0000);
+				ft_putpixel(fractol, i, display->ymid + j, 0x00FF0000);
 		}
 	}
 	i = 0;
 	while (i++ < utils->winy)
 	{
-		ft_putpixel(fractol, x, i, 0x00FFFFFF);
-		if ((i - y) % 200 == 0)
+		ft_putpixel(fractol, display->xmid, i, 0x00FFFFFF);
+		if ((i - display->ymid) % display->graduationlen == 0)
 		{
 			j = -5;
 			while (j++ < 5)
-				ft_putpixel(fractol, x + j, i, 0x00FF0000);
+				ft_putpixel(fractol, display->xmid + j, i, 0x00FF0000);
 		}
 	}
 }
 
 int		render(t_params *params)
 {
-	print_grid(params->fractol, params->utils);
+	print_grid(params->fractol, params->utils, params->display);
+	printf("xleft = %d, xright = %d\n", params->display->xleftbound, params->display->xrightbound);
+	for(int i = 0; i < 100; i++)
+		ft_putpixel(params->fractol, params->display->xleftbound, params->display->ymid + i, 0x000000FF);
+	for(int i = 0; i < 100; i++)
+		ft_putpixel(params->fractol, params->display->xrightbound, params->display->ymid + i, 0x000000FF);
+	for(int i = 0; i < 100; i++)
+		ft_putpixel(params->fractol, params->display->xmid + i, params->display->yupbound, 0x000000FF);
+	for(int i = 0; i < 100; i++)
+		ft_putpixel(params->fractol, params->display->xmid + i, params->display->ydownbound, 0x000000FF);
 	mlx_put_image_to_window(params->utils->mlx, params->utils->win, params->fractol->img, 0, 0);
 	return (1);
 }
@@ -102,23 +106,46 @@ int		keyhandler(int key, t_params *params)
 	return (1);
 }
 
+t_display	*init_display(t_display *display, t_mlx *utils)
+{
+	int	xmid;
+	int	ymid;
+	int	graduationlen;
+
+	xmid = utils->winx / 2;
+	ymid = utils->winy / 2;
+	graduationlen = 200;
+	display->xmid = xmid;
+	display->ymid = ymid;
+	display->graduationlen = graduationlen;
+	display->xleftbound = xmid - graduationlen * 2;
+	display->xrightbound = xmid + graduationlen * 2;
+	display->yupbound = ymid - graduationlen * 2;
+	display->ydownbound = ymid + graduationlen * 2;
+	return (display);
+}
+
 int main(void)
 {
 	t_mlx		*utils;
 	t_image		*fractol;
+	t_display	*display;
 	t_params	*params;
 
 	utils = ft_calloc(1, sizeof (t_mlx));
 	fractol = ft_calloc(1, sizeof (t_image));
+	display = ft_calloc(1, sizeof (t_display));
 	params = ft_calloc(1, sizeof (t_params));
 	params->utils = utils;
 	params->fractol = fractol;
+	params->display = display;
 	utils->mlx = mlx_init();
 	utils->win = mlx_new_window(utils->mlx, 1920, 1080, "fractol");
 	utils->winx = 1920;
 	utils->winy = 1080;
 	fractol->img = mlx_new_image(utils->mlx, utils->winx, utils->winy);
 	fractol->data = mlx_get_data_addr(fractol->img, &fractol->bpp, &fractol->size_line, &fractol->endian);
+	init_display(display, utils);
 	mlx_hook(utils->win, 4, 1L<<2, scrollhandler, NULL);
 	mlx_hook(utils->win, 2, 1L<<0, keyhandler, params);
 	mlx_loop_hook(utils->mlx, render, params);
