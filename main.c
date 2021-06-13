@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/12 21:04:30 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/06/13 21:54:39 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/06/13 21:56:25 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,9 @@ void	print_circle(t_image *img, t_display *display)
 	}
 }
 
+//next step:
+//find a way to print a circle
+//then a way to iterate on each point of the circle and change color if the point goes south. maybe store every point in an array
 int		render(t_params *params)
 {
 	print_grid(params->fractol, params->utils, params->display);
