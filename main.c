@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/12 21:04:30 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/06/13 17:09:16 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/06/13 21:00:11 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,26 +20,52 @@
 **
 **/
 
-void	ft_putpixel(int x, int y, char *data)
+void	ft_putpixel(t_image *img, int x, int y, int color)
 {
-	int	*tab;
+	char	*dst;
 
-	tab = (int *)data;
-	int i = 0;
-	while (i < x)
-	{
-		tab[y * x + x + i++] = 0x00FF0000;
-	}
+	dst = img->data + (y * img->size_line + x * (img->bpp / 8));
+	*(unsigned int*)dst = color;
 }
 
-int		render(t_image *fractol)
+void	print_grid(t_image *fractol, t_mlx *utils)
 {
 	int	x;
 	int	y;
+	int	i;
+	int	j;
 
-	x = 0;
-	y = 0;
-	ft_putpixel(x, y, fractol->img);
+	i = 0;
+	x = utils->winx / 2;
+	y = utils->winy / 2;
+
+	while (i++ < utils->winx)
+	{
+		ft_putpixel(fractol, i, y, 0x00FFFFFF);
+		j = -5;
+		if ((i - x) % 200 == 0)
+		{
+			while (j++ < 5)
+				ft_putpixel(fractol, i, y + j, 0x00FF0000);
+		}
+	}
+	i = 0;
+	while (i++ < utils->winy)
+	{
+		ft_putpixel(fractol, x, i, 0x00FFFFFF);
+		if ((i - y) % 200 == 0)
+		{
+			j = -5;
+			while (j++ < 5)
+				ft_putpixel(fractol, x + j, i, 0x00FF0000);
+		}
+	}
+}
+
+int		render(t_params *params)
+{
+	print_grid(params->fractol, params->utils);
+	mlx_put_image_to_window(params->utils->mlx, params->utils->win, params->fractol->img, 0, 0);
 	return (1);
 }
 
@@ -64,7 +90,6 @@ int		scrollhandler(int button, void *a)
 
 int		keyhandler(int key, t_params *params)
 {
-	printf("%d\n", key);
 	if (key == 53)
 	{
 		mlx_destroy_image(params->utils->mlx, params->fractol->img);
@@ -90,12 +115,13 @@ int main(void)
 	params->fractol = fractol;
 	utils->mlx = mlx_init();
 	utils->win = mlx_new_window(utils->mlx, 1920, 1080, "fractol");
-	fractol->img = mlx_new_image(utils->mlx, 1920, 1080);
-	fractol->data = mlx_get_data_addr (fractol->img, &fractol->bpp, &fractol->size_line, &fractol->endian);
-	// mlx_loop_hook(utils->mlx, &render, );
-	mlx_hook(utils->win, 4, 1L<<2, &scrollhandler, NULL);
-	mlx_hook(utils->win, 2, 1L<<0, &keyhandler, params);
+	utils->winx = 1920;
+	utils->winy = 1080;
+	fractol->img = mlx_new_image(utils->mlx, utils->winx, utils->winy);
+	fractol->data = mlx_get_data_addr(fractol->img, &fractol->bpp, &fractol->size_line, &fractol->endian);
+	mlx_hook(utils->win, 4, 1L<<2, scrollhandler, NULL);
+	mlx_hook(utils->win, 2, 1L<<0, keyhandler, params);
+	mlx_loop_hook(utils->mlx, render, params);
 	mlx_loop(utils->mlx);
-
 	return (0);
 }

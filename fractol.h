@@ -21,6 +21,8 @@
 typedef struct	s_mlx {
 	void	*mlx;
 	void	*win;
+	int		winx;
+	int		winy;
 }				t_mlx;
 
 typedef struct	s_image {
@@ -31,10 +33,18 @@ typedef struct	s_image {
 	char	*data;
 }				t_image;
 
+typedef struct	s_display
+{
+	int	x;
+	int	y;
+}				t_display;
+
+
 typedef struct	s_params
 {
-	t_image	*fractol;
-	t_mlx	*utils;
+	t_image		*fractol;
+	t_mlx		*utils;
+	t_display	*display;
 }				t_params;
 
 
