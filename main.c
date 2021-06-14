@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/12 21:04:30 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/06/13 21:56:25 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/06/14 10:40:33 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	ft_putpixel(t_image *img, int x, int y, int color)
 {
 	char	*dst;
 
-	dst = img->data + (y * img->size_line + x * (img->bpp / 8));
+	dst = img->data + (img->size_line * 1080 - (y + 1) * img->size_line + x * (img->bpp / 8));
 	*(unsigned int*)dst = color;
 }
 
@@ -133,17 +133,20 @@ t_display	*init_display(t_display *display, t_mlx *utils)
 	int	xmid;
 	int	ymid;
 	int	graduationlen;
+	int	radius;
 
 	xmid = utils->winx / 2;
 	ymid = utils->winy / 2;
-	graduationlen = 200;
 	display->xmid = xmid;
 	display->ymid = ymid;
+	graduationlen = 200;
+	radius = graduationlen;
 	display->graduationlen = graduationlen;
-	display->xleftbound = xmid - graduationlen * 2;
-	display->xrightbound = xmid + graduationlen * 2;
-	display->yupbound = ymid - graduationlen * 2;
-	display->ydownbound = ymid + graduationlen * 2;
+	display->radius = graduationlen * 2;
+	display->xleftbound = xmid - radius;
+	display->xrightbound = xmid + radius;
+	display->yupbound = ymid + radius;
+	display->ydownbound = ymid - radius;
 	return (display);
 }
 

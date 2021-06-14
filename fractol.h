@@ -42,6 +42,7 @@ typedef struct	s_display
 	int	ymid;
 	int	ydownbound;
 	int	graduationlen;
+	int	radius;
 }				t_display;
 
 
