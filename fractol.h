@@ -43,13 +43,32 @@ typedef struct	s_display
 	int	ydownbound;
 	int	graduationlen;
 	int	radius;
+
 }				t_display;
+
+typedef struct	s_coor
+{
+	int	xdefault;
+	int	ydefault;
+	double	x;
+	double	y;
+	double	color;
+	int	exited;
+}				t_coor;
+
+typedef struct	s_complex
+{
+	double	real;
+	double	imaginary;
+}				t_complex;
+
 
 
 typedef struct	s_params
 {
 	t_image		*fractol;
 	t_mlx		*utils;
+	t_coor		**coor;
 	t_display	*display;
 }				t_params;
 
