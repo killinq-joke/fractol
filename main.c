@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/12 21:04:30 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/06/14 10:40:33 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/06/14 11:14:12 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,16 +59,20 @@ void	print_grid(t_image *fractol, t_mlx *utils, t_display *display)
 
 void	print_circle(t_image *img, t_display *display)
 {
-	int	x;
-	int	y;
+	double		x;
+	double		y;
+	double	distance;
 
-	y = display->yupbound;
-	while (y < display->ydownbound)
+	y = 0;
+	while (y < 1080)
 	{
-		x = display->xleftbound;
-		while (x < display->xrightbound)
+		x = 0;
+		while (x < 1920)
 		{
-			ft_putpixel(img, x, y, 0x00FF0000);
+			distance = sqrt(pow((x - display->xmid), 2) + pow((y - display->ymid), 2));
+			// printf("%f\n", distance);
+			if (distance < display->radius)
+				ft_putpixel(img, x, y, 0x00FF0000);
 			x++;
 		}
 		y++;
@@ -90,7 +94,8 @@ int		render(t_params *params)
 	// 	ft_putpixel(params->fractol, params->display->xmid + i, params->display->yupbound, 0x000000FF);
 	// for(int i = 0; i < 100; i++)
 	// 	ft_putpixel(params->fractol, params->display->xmid + i, params->display->ydownbound, 0x000000FF);
-	// print_circle(params->fractol, params->display);
+	print_circle(params->fractol, params->display);
+	// printf("%f\n", sqrt(pow((400), 2) + pow((400), 2)));
 	mlx_put_image_to_window(params->utils->mlx, params->utils->win, params->fractol->img, 0, 0);
 	return (1);
 }
