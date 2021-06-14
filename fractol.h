@@ -72,5 +72,6 @@ typedef struct	s_params
 	t_display	*display;
 }				t_params;
 
+t_image	*init_image(t_mlx *utils);
 
 #endif

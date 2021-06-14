@@ -20,7 +20,7 @@
 **
 **/
 
-void	ft_putpixel(t_image *img, int x, int y, double color)
+void	ft_putpixel(t_image *img, int x, int y, int color)
 {
 	char	*dst;
 
@@ -109,8 +109,8 @@ t_coor	**init_coor(t_display *display)
 			coor[i] = ft_calloc(1, sizeof (t_coor));
 			coor[i]->xdefault = x;
 			coor[i]->ydefault = y;
-			coor[i]->x = ((double)x - (double)display->xmid) / 200;
-			coor[i]->y = ((double)y - (double)display->ymid) / 200;
+			coor[i]->x = ((double)x - (double)display->xmid) / display->graduationlen;
+			coor[i]->y = ((double)y - (double)display->ymid) / display->graduationlen;
 			// printf("%f, %d, %d\n", (double)y - (double)display->ymid, y, display->ymid);
 			coor[i]->color = 0x00FFFFFF;
 			i++;
@@ -124,6 +124,8 @@ t_coor	**init_coor(t_display *display)
 
 int		iterate_point(t_image *img, t_display *display, t_coor **coor)
 {
+	double	xx;
+	double	yy;
 	// int	i;
 
 	// i = 1080 * display->xmid + 700;
@@ -138,19 +140,23 @@ int		iterate_point(t_image *img, t_display *display, t_coor **coor)
 	// 	// }
 	int	i;
 
+	// i = 1920 * 500 + 1000;
 	i = 0;
 	while (i < 1920 * 1080 - 1)
 	{
-		if (isincircle(coor[i]->xdefault, coor[i]->ydefault, display))
-		{
+		// if (isincircle(coor[i]->xdefault, coor[i]->ydefault, display))
+		// {
 			// printf("x == %f, y == %f\n", coor[i]->x, coor[i]->y);
-			coor[i]->x = pow(coor[i]->x, 2);
-			coor[i]->y = -1 * pow(coor[i]->y, 2);
-			if (coor[i]->color > 0 && isincircle(coor[i]->x * 200 + display->xmid, coor[i]->y * 200 + display->ymid, display))
-				coor[i]->color -= 0x00FFFFFF / 1000;
+			xx = coor[i]->x * coor[i]->x - coor[i]->y * coor[i]->y;
+			yy = 2.0 * coor[i]->x * coor[i]->y;
+			coor[i]->x = xx + (coor[i]->xdefault - (double)display->xmid) / display->graduationlen;
+			coor[i]->y = yy + (coor[i]->ydefault - (double)display->ymid) / display->graduationlen;
+			if (coor[i]->color > 0 && isincircle(coor[i]->x * display->graduationlen + display->xmid, coor[i]->y * display->graduationlen + display->ymid, display))
+				coor[i]->color -= 0x00FFFFFF / 2000;
 			// printf("%f\n", coor[i]->x * 200 + display->xmid);
-		}
-			ft_putpixel(img, coor[i]->xdefault, coor[i]->ydefault, coor[i]->color);
+		// }
+		ft_putpixel(img, coor[i]->xdefault, coor[i]->ydefault, coor[i]->color);
+		// ft_putpixel(img, coor[i]->x * display->graduationlen + display->xmid, coor[i]->y * display->graduationlen + display->ymid, coor[i]->color);
 		i++;
 	}
 		// i++;
@@ -161,7 +167,7 @@ int		iterate_point(t_image *img, t_display *display, t_coor **coor)
 
 int		render(t_params *params)
 {
-	print_grid(params->fractol, params->utils, params->display);
+	// print_grid(params->fractol, params->utils, params->display);
 	// printf("xleft = %d, xright = %d\n", params->display->xleftbound, params->display->xrightbound);
 	// for(int i = 0; i < 100; i++)
 	// 	ft_putpixel(params->fractol, params->display->xleftbound, params->display->ymid + i, 0x000000FF);
@@ -185,14 +191,14 @@ int		render(t_params *params)
 
 int		scrollhandler(int button, void *a)
 {
-	a = NULL;
+	(void)a;
 	if (button == 4)
 	{
-
+		// params->display->graduationlen--;
 	}
 	else if (button == 5)
 	{
-
+		// params->display->graduationlen++;
 	}
 	return (1);
 }
@@ -214,17 +220,17 @@ int		keyhandler(int key, t_params *params)
 t_display	*init_display(t_mlx *utils)
 {
 	t_display	*display;
-	int	xmid;
-	int	ymid;
-	int	graduationlen;
-	int	radius;
+	int			xmid;
+	int			ymid;
+	int			graduationlen;
+	int			radius;
 
 	display = ft_calloc(1, sizeof (t_display));
 	xmid = utils->winx / 2;
 	ymid = utils->winy / 2;
 	display->xmid = xmid;
 	display->ymid = ymid;
-	graduationlen = 200;
+	graduationlen = 350;
 	radius = graduationlen;
 	display->graduationlen = graduationlen;
 	display->radius = graduationlen * 2;
