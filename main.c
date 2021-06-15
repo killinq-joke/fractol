@@ -30,23 +30,6 @@ void	ft_putpixel(t_image *img, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-// void	ft_putdarkerpixel(t_image *img, int x, int y, int color)
-// {
-// 	char			*dst;
-// 	char			colortab[4];
-// 	int				newcolor;
-
-// 	if (x < 0 || y < 0 || y > 1080 || x > 1920)
-// 		return ;
-// 	colortab[0] = ((color>>24) & 0xFF) - 1;
-// 	colortab[1] = ((color>>16) & 0xFF) - 1;
-// 	colortab[2] = ((color>>8) & 0xFF) - 1;
-// 	colortab[3] = (color & 0xFF) - 1;
-// 	newcolor = (unsigned int)colortab;
-// 	dst = img->data + (img->size_line * 1080 - (y + 1) * img->size_line + x * (img->bpp / 8));
-// 	*(unsigned int*)dst = newcolor;
-// }
-
 void	print_grid(t_image *fractol, t_mlx *utils, t_display *display)
 {
 	int	i;
@@ -105,9 +88,6 @@ void	print_circle(t_image *img, t_display *display)
 	}
 }
 
-//next step:
-//find a way to print a circle
-//then a way to iterate on each point of the circle and change color if the point goes south. maybe store every point in an array
 t_coor	**init_coor(t_display *display)
 {
 	t_coor	**coor;
@@ -139,51 +119,64 @@ t_coor	**init_coor(t_display *display)
 }
 
 
-int		iterate_point(t_image *img, t_display *display, t_coor **coor)
+int		mandlebrot(t_image *img, t_display *display, t_coor **coor)
 {
 	double	xx;
 	double	yy;
 	int		i;
-	// char	colortab[4];
 
 	i = 0;
 	while (i < 1920 * 1080 - 1)
 	{
-		// if (isincircle(coor[i]->xdefault, coor[i]->ydefault, display))
-		// {
-			// printf("x == %f, y == %f\n", coor[i]->x, coor[i]->y);
-			xx = coor[i]->x * coor[i]->x - coor[i]->y * coor[i]->y;
-			yy = 2.0 * coor[i]->x * coor[i]->y;
-			coor[i]->x = xx + (coor[i]->xdefault - (double)display->xmid) / display->graduationlen;
-			coor[i]->y = yy + (coor[i]->ydefault - (double)display->ymid) / display->graduationlen;
-			if (isincircle(coor[i]->x * display->graduationlen + display->xmid, coor[i]->y * display->graduationlen + display->ymid, display))
-			{
-				coor[i]->color = 0x00000000;
-				// colortab[3] = ((coor[i]->color>>24) & 0xFF) - 1;
-				// colortab[2] = ((coor[i]->color>>16) & 0xFF) - 1;
-				// colortab[1] = ((coor[i]->color>>8) & 0xFF) - 1;
-				// colortab[0] = ((coor[i]->color) & 0xFF);
-				// // printf("%x\n", coor[i]->color);
-				// ft_putpixeltab(img, coor[i]->xdefault, coor[i]->ydefault, colortab);
-				ft_putpixel(img, coor[i]->xdefault, coor[i]->ydefault, coor[i]->color);
-			}
-			else
-			{
-				coor[i]->color += 1000000;
-				ft_putpixel(img, coor[i]->xdefault, coor[i]->ydefault, coor[i]->color);
-				if (coor[i]->color >= 0xFFFFFFF)
-					coor[i]->color = 100;
-			}
-				//coor[i]->color -= 0x00FFFFFF / 2000;
-			// printf("%f\n", coor[i]->x * 200 + display->xmid);
-		// }
-		// ft_putpixel(img, coor[i]->x * display->graduationlen + display->xmid, coor[i]->y * display->graduationlen + display->ymid, coor[i]->color);
-
+		xx = coor[i]->x * coor[i]->x - coor[i]->y * coor[i]->y;
+		yy = 2.0 * coor[i]->x * coor[i]->y;
+		coor[i]->x = xx + (coor[i]->xdefault - (double)display->xmid) / display->graduationlen;
+		coor[i]->y = yy + (coor[i]->ydefault - (double)display->ymid) / display->graduationlen;
+		if (isincircle(coor[i]->x * display->graduationlen + display->xmid, coor[i]->y * display->graduationlen + display->ymid, display))
+		{
+			coor[i]->color = 0x00000000;
+			ft_putpixel(img, coor[i]->xdefault, coor[i]->ydefault, coor[i]->color);
+		}
+		else
+		{
+			coor[i]->color += 1000000;
+			ft_putpixel(img, coor[i]->xdefault, coor[i]->ydefault, coor[i]->color);
+			if (coor[i]->color >= 0xFFFFFFF)
+				coor[i]->color = 100;
+		}
 		i++;
 	}
-		// i++;
-		// printf("x == %f, y == %f\n", coor[i]->x, coor[i]->y);
-	// }
+	return (1);
+}
+
+int		julia(t_image *img, t_display *display, t_coor **coor)
+{
+	double	xx;
+	double	yy;
+	int		i;
+
+	i = 0;
+	while (i < 1920 * 1080 - 1)
+	{
+		xx = coor[i]->x * coor[i]->x - coor[i]->y * coor[i]->y + display->xinc;
+		yy = 2.0 * coor[i]->x * coor[i]->y + display->yinc;
+		coor[i]->x = xx + (coor[i]->xdefault - (double)display->xmid) / display->graduationlen;
+		coor[i]->y = yy + (coor[i]->ydefault - (double)display->ymid) / display->graduationlen;
+		if (isincircle(coor[i]->x * display->graduationlen + display->xmid, coor[i]->y * display->graduationlen + display->ymid, display))
+		{
+			coor[i]->color = 0x00000000;
+			ft_putpixel(img, coor[i]->xdefault, coor[i]->ydefault, coor[i]->color);
+		}
+		else
+		{
+			coor[i]->color += 10000;
+			ft_putpixel(img, coor[i]->xdefault, coor[i]->ydefault, coor[i]->color);
+			if (coor[i]->color >= 0xFFFFFFF)
+				coor[i]->color = 100;
+		}
+		i++;
+	}
+	// printf("%d\n", display->xinc);
 	return (1);
 }
 
@@ -201,7 +194,10 @@ int		render(t_params *params)
 	// 	ft_putpixel(params->fractol, params->display->xmid + i, params->display->ydownbound, 0x000000FF);
 	// print_circle(params->fractol, params->display);
 	// printf("%f\n", sqrt(pow((400), 2) + pow((400), 2)));
-	iterate_point(params->fractol, params->display, params->coor);
+	if (ft_strcmp(params->utils->name, "mandlebrot") == 0)
+		mandlebrot(params->fractol, params->display, params->coor);
+	else if (ft_strcmp(params->utils->name, "julia") == 0)
+		julia(params->fractol, params->display, params->coor);
 	mlx_put_image_to_window(params->utils->mlx, params->utils->win, params->fractol->img, 0, 0);
 	return (1);
 }
@@ -285,7 +281,7 @@ t_image	*init_image(t_mlx *utils)
 	return (fractol);
 }
 
-int main(void)
+int main(int ac, char **av)
 {
 	t_mlx		*utils;
 	t_image		*fractol;
@@ -293,20 +289,33 @@ int main(void)
 	t_coor		**coor;
 	t_params	*params;
 
-	utils = init_utils();
-	fractol = init_image(utils);
-	display = init_display(utils);
-	coor = init_coor(display);
-	params = ft_calloc(1, sizeof (t_params));
-	params->utils = utils;
-	params->fractol = fractol;
-	params->coor = coor;
-	params->display = display;
-	mlx_hook(utils->win, 4, 1L<<2, scrollhandler, NULL);
-	mlx_hook(utils->win, 2, 1L<<0, keyhandler, params);
-	mlx_loop_hook(utils->mlx, render, params);
-	mlx_loop_hook(utils->mlx, render, params);
-	mlx_loop_hook(utils->mlx, render, params);
-	mlx_loop(utils->mlx);
+	if (ac > 1)
+	{
+		if (ft_strcmp(av[1], "mandlebrot") == 0 || ft_strcmp(av[1], "julia") == 0)
+		{
+			utils = init_utils();
+			utils->name = av[1];
+			fractol = init_image(utils);
+			display = init_display(utils);
+			if (ft_strcmp(av[1], "julia") == 0)
+			{
+				display->xinc = ft_atoi(av[2]);
+				display->yinc = ft_atoi(av[3]);
+			}
+			coor = init_coor(display);
+			params = ft_calloc(1, sizeof (t_params));
+			params->utils = utils;
+			params->fractol = fractol;
+			params->coor = coor;
+			params->display = display;
+			mlx_hook(utils->win, 4, 1L<<2, scrollhandler, NULL);
+			mlx_hook(utils->win, 2, 1L<<0, keyhandler, params);
+			mlx_loop_hook(utils->mlx, render, params);
+			mlx_loop_hook(utils->mlx, render, params);
+			mlx_loop_hook(utils->mlx, render, params);
+			mlx_loop(utils->mlx);
+		}
+
+	}
 	return (0);
 }

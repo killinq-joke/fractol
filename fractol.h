@@ -23,6 +23,7 @@ typedef struct	s_mlx {
 	void	*win;
 	int		winx;
 	int		winy;
+	char	*name;
 }				t_mlx;
 
 typedef struct	s_image {
@@ -43,7 +44,8 @@ typedef struct	s_display
 	int	ydownbound;
 	int	graduationlen;
 	int	radius;
-
+	int	xinc;
+	int	yinc;
 }				t_display;
 
 typedef struct	s_coor
@@ -53,7 +55,8 @@ typedef struct	s_coor
 	double	x;
 	double	y;
 	int		color;
-	int		exited;
+	int		Cx;
+	int		Cy;
 }				t_coor;
 
 typedef struct	s_complex
