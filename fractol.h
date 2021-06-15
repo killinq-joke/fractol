@@ -52,8 +52,8 @@ typedef struct	s_coor
 	int	ydefault;
 	double	x;
 	double	y;
-	double	color;
-	int	exited;
+	int		color;
+	int		exited;
 }				t_coor;
 
 typedef struct	s_complex
@@ -62,6 +62,13 @@ typedef struct	s_complex
 	double	imaginary;
 }				t_complex;
 
+typedef struct	s_color
+{
+	char	transparency;
+	char	red;
+	char	green;
+	char	blue;
+}				t_color;
 
 
 typedef struct	s_params

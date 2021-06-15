@@ -30,6 +30,23 @@ void	ft_putpixel(t_image *img, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
+// void	ft_putdarkerpixel(t_image *img, int x, int y, int color)
+// {
+// 	char			*dst;
+// 	char			colortab[4];
+// 	int				newcolor;
+
+// 	if (x < 0 || y < 0 || y > 1080 || x > 1920)
+// 		return ;
+// 	colortab[0] = ((color>>24) & 0xFF) - 1;
+// 	colortab[1] = ((color>>16) & 0xFF) - 1;
+// 	colortab[2] = ((color>>8) & 0xFF) - 1;
+// 	colortab[3] = (color & 0xFF) - 1;
+// 	newcolor = (unsigned int)colortab;
+// 	dst = img->data + (img->size_line * 1080 - (y + 1) * img->size_line + x * (img->bpp / 8));
+// 	*(unsigned int*)dst = newcolor;
+// }
+
 void	print_grid(t_image *fractol, t_mlx *utils, t_display *display)
 {
 	int	i;
@@ -126,21 +143,9 @@ int		iterate_point(t_image *img, t_display *display, t_coor **coor)
 {
 	double	xx;
 	double	yy;
-	// int	i;
+	int		i;
+	// char	colortab[4];
 
-	// i = 1080 * display->xmid + 700;
-	// printf("%f, %f--- %d\n", coor[i]->x, coor[i]->y, img->bpp);
-
-	// ft_putpixel(img, coor[i].x + display->xmid, coor[i].y + display->ymid, 0x00FF0000);
-	// int	i;
-
-	// i = display->ymid * 1920;
-	// // while (i < 1920 * 1080 - 1)
-	// // {
-	// 	// }
-	int	i;
-
-	// i = 1920 * 500 + 1000;
 	i = 0;
 	while (i < 1920 * 1080 - 1)
 	{
@@ -151,12 +156,29 @@ int		iterate_point(t_image *img, t_display *display, t_coor **coor)
 			yy = 2.0 * coor[i]->x * coor[i]->y;
 			coor[i]->x = xx + (coor[i]->xdefault - (double)display->xmid) / display->graduationlen;
 			coor[i]->y = yy + (coor[i]->ydefault - (double)display->ymid) / display->graduationlen;
-			if (coor[i]->color > 0 && isincircle(coor[i]->x * display->graduationlen + display->xmid, coor[i]->y * display->graduationlen + display->ymid, display))
-				coor[i]->color -= 0x00FFFFFF / 2000;
+			if (isincircle(coor[i]->x * display->graduationlen + display->xmid, coor[i]->y * display->graduationlen + display->ymid, display))
+			{
+				coor[i]->color = 0x00000000;
+				// colortab[3] = ((coor[i]->color>>24) & 0xFF) - 1;
+				// colortab[2] = ((coor[i]->color>>16) & 0xFF) - 1;
+				// colortab[1] = ((coor[i]->color>>8) & 0xFF) - 1;
+				// colortab[0] = ((coor[i]->color) & 0xFF);
+				// // printf("%x\n", coor[i]->color);
+				// ft_putpixeltab(img, coor[i]->xdefault, coor[i]->ydefault, colortab);
+				ft_putpixel(img, coor[i]->xdefault, coor[i]->ydefault, coor[i]->color);
+			}
+			else
+			{
+				coor[i]->color += 1000000;
+				ft_putpixel(img, coor[i]->xdefault, coor[i]->ydefault, coor[i]->color);
+				if (coor[i]->color >= 0xFFFFFFF)
+					coor[i]->color = 100;
+			}
+				//coor[i]->color -= 0x00FFFFFF / 2000;
 			// printf("%f\n", coor[i]->x * 200 + display->xmid);
 		// }
-		ft_putpixel(img, coor[i]->xdefault, coor[i]->ydefault, coor[i]->color);
 		// ft_putpixel(img, coor[i]->x * display->graduationlen + display->xmid, coor[i]->y * display->graduationlen + display->ymid, coor[i]->color);
+
 		i++;
 	}
 		// i++;
@@ -230,7 +252,7 @@ t_display	*init_display(t_mlx *utils)
 	ymid = utils->winy / 2;
 	display->xmid = xmid;
 	display->ymid = ymid;
-	graduationlen = 350;
+	graduationlen = 500;
 	radius = graduationlen;
 	display->graduationlen = graduationlen;
 	display->radius = graduationlen * 2;
@@ -282,6 +304,8 @@ int main(void)
 	params->display = display;
 	mlx_hook(utils->win, 4, 1L<<2, scrollhandler, NULL);
 	mlx_hook(utils->win, 2, 1L<<0, keyhandler, params);
+	mlx_loop_hook(utils->mlx, render, params);
+	mlx_loop_hook(utils->mlx, render, params);
 	mlx_loop_hook(utils->mlx, render, params);
 	mlx_loop(utils->mlx);
 	return (0);
