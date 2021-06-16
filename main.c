@@ -209,12 +209,14 @@ int		render(t_params *params)
 ** button 5 == scroll up
 */
 
-int		scrollhandler(int button, void *a)
+int		scrollhandler(int button, t_params *params)
 {
-	(void)a;
 	if (button == 4)
 	{
-		// params->display->graduationlen--;
+		params->display->graduationlen += 100;
+		params->display->radius = params->display->graduationlen;
+		free(params->coor);
+		params->coor = init_coor(params->display);
 	}
 	else if (button == 5)
 	{
@@ -250,7 +252,7 @@ t_display	*init_display(t_mlx *utils)
 	ymid = utils->winy / 2;
 	display->xmid = xmid;
 	display->ymid = ymid;
-	graduationlen = 500;
+	graduationlen = 300;
 	radius = graduationlen;
 	display->graduationlen = graduationlen;
 	display->radius = graduationlen * 2;
@@ -283,6 +285,14 @@ t_image	*init_image(t_mlx *utils)
 	return (fractol);
 }
 
+int		killwindow(t_params *params)
+{
+	mlx_destroy_image(params->utils->mlx, params->fractol);
+	mlx_destroy_window(params->utils->mlx, params->utils->win);
+	exit(1);
+	return (0);
+}
+
 int main(int ac, char **av)
 {
 	t_mlx		*utils;
@@ -303,6 +313,7 @@ int main(int ac, char **av)
 			{
 				display->xinc = ft_atof(av[2]);
 				display->yinc = ft_atof(av[3]);
+				// printf("%f %f\n", display->xinc, display->yinc);
 			}
 			coor = init_coor(display);
 			params = ft_calloc(1, sizeof (t_params));
@@ -312,12 +323,18 @@ int main(int ac, char **av)
 			params->display = display;
 			mlx_hook(utils->win, 4, 1L<<2, scrollhandler, NULL);
 			mlx_hook(utils->win, 2, 1L<<0, keyhandler, params);
+			mlx_hook(utils->win, 17, 1L<<0, killwindow, params);
 			mlx_loop_hook(utils->mlx, render, params);
-			mlx_loop_hook(utils->mlx, render, params);
-			mlx_loop_hook(utils->mlx, render, params);
+			// mlx_loop_hook(utils->mlx, render, params);
+			// mlx_loop_hook(utils->mlx, render, params);
+			// mlx_loop_hook(utils->mlx, render, params);
+			// mlx_loop_hook(utils->mlx, render, params);
+			// mlx_loop_hook(utils->mlx, render, params);
+			// mlx_loop_hook(utils->mlx, render, params);
+			// mlx_loop_hook(utils->mlx, render, params);
+			// mlx_loop_hook(utils->mlx, render, params);
 			mlx_loop(utils->mlx);
 		}
-
 	}
 	return (0);
 }
