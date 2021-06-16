@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/18 11:11:30 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/06/15 18:33:45 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/06/16 10:18:37 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ struct		s_list
 };
 
 int			ft_atoi(const char *nptr);
+double		ft_atof(const char *nptr);
 long		ft_atol(const char *nptr);
 void		ft_bzero(void *s, size_t n);
 int			ft_isdigit(int c);

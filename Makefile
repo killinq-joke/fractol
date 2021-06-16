@@ -4,6 +4,8 @@ SRCS	=	main.c
 OBJS	=	$(SRCS:c=o)
 NAME	=	fractol
 LIB		=	libft.a
+LIBSRCS	=	libft/*.c
+LIBOBJS	=	libft/*.o
 
 .PHONY:	all
 all:	$(LIB) $(NAME)

@@ -44,8 +44,8 @@ typedef struct	s_display
 	int	ydownbound;
 	int	graduationlen;
 	int	radius;
-	int	xinc;
-	int	yinc;
+	double	xinc;
+	double	yinc;
 }				t_display;
 
 typedef struct	s_coor

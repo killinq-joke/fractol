@@ -158,10 +158,10 @@ int		julia(t_image *img, t_display *display, t_coor **coor)
 	i = 0;
 	while (i < 1920 * 1080 - 1)
 	{
-		xx = coor[i]->x * coor[i]->x - coor[i]->y * coor[i]->y + display->xinc;
-		yy = 2.0 * coor[i]->x * coor[i]->y + display->yinc;
-		coor[i]->x = xx + (coor[i]->xdefault - (double)display->xmid) / display->graduationlen;
-		coor[i]->y = yy + (coor[i]->ydefault - (double)display->ymid) / display->graduationlen;
+		xx = coor[i]->x * coor[i]->x - coor[i]->y * coor[i]->y;
+		yy = 2.0 * coor[i]->x * coor[i]->y;
+		coor[i]->x = xx + display->xinc;
+		coor[i]->y = yy + display->yinc;
 		if (isincircle(coor[i]->x * display->graduationlen + display->xmid, coor[i]->y * display->graduationlen + display->ymid, display))
 		{
 			coor[i]->color = 0x00000000;
@@ -169,10 +169,12 @@ int		julia(t_image *img, t_display *display, t_coor **coor)
 		}
 		else
 		{
-			coor[i]->color += 10000;
+			if (coor[i]->color == 0)
+				coor[i]->color = 0x00FFFFFF;
+			coor[i]->color /= 1.23;
 			ft_putpixel(img, coor[i]->xdefault, coor[i]->ydefault, coor[i]->color);
-			if (coor[i]->color >= 0xFFFFFFF)
-				coor[i]->color = 100;
+			if (coor[i]->color >= 0x00FFFFF)
+				coor[i]->color = 10000;
 		}
 		i++;
 	}
@@ -299,8 +301,8 @@ int main(int ac, char **av)
 			display = init_display(utils);
 			if (ft_strcmp(av[1], "julia") == 0)
 			{
-				display->xinc = ft_atoi(av[2]);
-				display->yinc = ft_atoi(av[3]);
+				display->xinc = ft_atof(av[2]);
+				display->yinc = ft_atof(av[3]);
 			}
 			coor = init_coor(display);
 			params = ft_calloc(1, sizeof (t_params));
