@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/21 14:33:17 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/06/16 10:14:35 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/06/16 10:15:52 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,4 @@ double	ft_atof(const char *nptr)
 		ft_decimalconvert(&nptr[i + 1]);
 	}
 	return (sign * result);
-}
-
-#include <stdio.h>
-int main()
-{
-	printf("%f\n", atof("123."));
-	return (0);
 }
