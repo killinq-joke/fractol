@@ -124,14 +124,19 @@ int		mandlebrot(t_image *img, t_display *display, t_coor **coor)
 	double	xx;
 	double	yy;
 	int		i;
+	// int		j;
 
 	i = 0;
 	while (i < 1920 * 1080 - 1)
 	{
-		xx = coor[i]->x * coor[i]->x - coor[i]->y * coor[i]->y;
-		yy = 2.0 * coor[i]->x * coor[i]->y;
-		coor[i]->x = xx + (coor[i]->xdefault - (double)display->xmid) / display->graduationlen;
-		coor[i]->y = yy + (coor[i]->ydefault - (double)display->ymid) / display->graduationlen;
+		// j = 0;
+		// while (j++ < display->graduationlen / 10)
+		// {
+			xx = coor[i]->x * coor[i]->x - coor[i]->y * coor[i]->y;
+			yy = 2.0 * coor[i]->x * coor[i]->y;
+			coor[i]->x = xx + (coor[i]->xdefault - (double)display->xmid) / display->graduationlen;
+			coor[i]->y = yy + (coor[i]->ydefault - (double)display->ymid) / display->graduationlen;
+		// }
 		if (isincircle(coor[i]->x * display->graduationlen + display->xmid, coor[i]->y * display->graduationlen + display->ymid, display))
 		{
 			coor[i]->color = 0x00000000;
@@ -149,36 +154,90 @@ int		mandlebrot(t_image *img, t_display *display, t_coor **coor)
 	return (1);
 }
 
+int		test(t_image *img, t_display *display)//, t_mlx *utils)
+{
+	double	xx;
+	double	yy;
+	int		x;
+	int		y;
+	double		xnext;
+	double		ynext;
+	int		i;
+
+	y = 0;
+	while (y < 1080 - 1)
+	{
+		x = 0;
+		while (x < 1920)
+		{
+			ynext = ((double)y - (double)display->ymid) / display->graduationlen;
+			xnext = ((double)x - (double)display->xmid) / display->graduationlen;
+			i = 0;
+			// printf("ymid %d -- ynext %f -- xnext %f\n", display->ymid, ynext, xnext);
+			while (i < display->graduationlen / 10)
+			{
+				xx = xnext * xnext - ynext * ynext;
+				yy = 2.0 * xnext * ynext;
+				xnext = xx + (x - (double)display->xmid) / display->graduationlen;
+				ynext = yy + (y - (double)display->ymid) / display->graduationlen;
+				i++;
+			}
+			if (isincircle(xnext * display->graduationlen + display->xmid, ynext * display->graduationlen + display->ymid, display))
+				ft_putpixel(img, x, y, 0x00FF0000);
+			else
+				ft_putpixel(img, x, y, 0x00FFFFFF);
+			// if (y == 540 && x == 1080)
+			// {
+			// 	ft_putpixel(img, x, y, 0x00FF0000);
+			// 	// print_grid(img, utils, display);
+			// }
+			x++;
+		}
+		y++;
+	}
+	return (1);
+}
+
 int		julia(t_image *img, t_display *display, t_coor **coor)
 {
 	double	xx;
 	double	yy;
 	int		i;
+	// int		j;
 
 	i = 0;
 	while (i < 1920 * 1080 - 1)
 	{
-		xx = coor[i]->x * coor[i]->x - coor[i]->y * coor[i]->y;
-		yy = 2.0 * coor[i]->x * coor[i]->y;
-		coor[i]->x = xx + display->xinc;
-		coor[i]->y = yy + display->yinc;
+		// j = 0;
+		// while (j++ < display->graduationlen / 2)
+		// {
+			xx = coor[i]->x * coor[i]->x - coor[i]->y * coor[i]->y;
+			yy = 2.0 * coor[i]->x * coor[i]->y;
+			coor[i]->x = xx + display->xinc;
+			coor[i]->y = yy + display->yinc;
+		// }
 		if (isincircle(coor[i]->x * display->graduationlen + display->xmid, coor[i]->y * display->graduationlen + display->ymid, display))
 		{
-			coor[i]->color = 0x00000000;
+			coor[i]->color = 0x00FFFFFF;
 			ft_putpixel(img, coor[i]->xdefault, coor[i]->ydefault, coor[i]->color);
 		}
 		else
 		{
-			if (coor[i]->color == 0)
-				coor[i]->color = 0x00FFFFFF;
-			coor[i]->color /= 1.23;
+			// if (coor[i]->color == 0)
+			// 	coor[i]->color = 0x00FFFFFF;
+			if (coor[i]->color == 0x00FFFFFF)
+				coor[i]->color = 0x00FF0000;
+			else if (coor[i]->color >= 0x00F00000)
+				coor[i]->color -= (0x00FFFFFF - 0x00F00000) / 10;
+			else
+				coor[i]->color = 0x00000000;
+			// coor[i]->color /= 1.23;
 			ft_putpixel(img, coor[i]->xdefault, coor[i]->ydefault, coor[i]->color);
-			if (coor[i]->color >= 0x00FFFFF)
-				coor[i]->color = 10000;
+			// if (coor[i]->color >= 0x00FFFFF)
+			// 	coor[i]->color = 10000;
 		}
 		i++;
 	}
-	// printf("%d\n", display->xinc);
 	return (1);
 }
 
@@ -196,8 +255,10 @@ int		render(t_params *params)
 	// 	ft_putpixel(params->fractol, params->display->xmid + i, params->display->ydownbound, 0x000000FF);
 	// print_circle(params->fractol, params->display);
 	// printf("%f\n", sqrt(pow((400), 2) + pow((400), 2)));
+		// mandlebrot(params->fractol, params->display, params->coor);
+
 	if (ft_strcmp(params->utils->name, "mandlebrot") == 0)
-		mandlebrot(params->fractol, params->display, params->coor);
+		test(params->fractol, params->display);//, params->utils);
 	else if (ft_strcmp(params->utils->name, "julia") == 0)
 		julia(params->fractol, params->display, params->coor);
 	mlx_put_image_to_window(params->utils->mlx, params->utils->win, params->fractol->img, 0, 0);
@@ -209,18 +270,25 @@ int		render(t_params *params)
 ** button 5 == scroll up
 */
 
-int		scrollhandler(int button, t_params *params)
+int		scrollhandler(int button, int x, int y, t_params *params)
 {
+	(void)x;
+	(void)y;
 	if (button == 4)
 	{
-		params->display->graduationlen += 100;
-		params->display->radius = params->display->graduationlen;
+		params->display->graduationlen += 10;
+		params->display->radius = params->display->graduationlen * 2;
 		free(params->coor);
 		params->coor = init_coor(params->display);
+		render(params);
 	}
 	else if (button == 5)
 	{
-		// params->display->graduationlen++;
+		params->display->graduationlen -= 10;
+		params->display->radius = params->display->graduationlen * 2;
+		free(params->coor);
+		params->coor = init_coor(params->display);
+		render(params);
 	}
 	return (1);
 }
@@ -252,7 +320,7 @@ t_display	*init_display(t_mlx *utils)
 	ymid = utils->winy / 2;
 	display->xmid = xmid;
 	display->ymid = ymid;
-	graduationlen = 300;
+	graduationlen = 500;
 	radius = graduationlen;
 	display->graduationlen = graduationlen;
 	display->radius = graduationlen * 2;
@@ -321,8 +389,8 @@ int main(int ac, char **av)
 			params->fractol = fractol;
 			params->coor = coor;
 			params->display = display;
-			mlx_hook(utils->win, 4, 1L<<2, scrollhandler, NULL);
 			mlx_hook(utils->win, 2, 1L<<0, keyhandler, params);
+			mlx_hook(utils->win, 4, 1L<<2, scrollhandler, params);
 			mlx_hook(utils->win, 17, 1L<<0, killwindow, params);
 			mlx_loop_hook(utils->mlx, render, params);
 			// mlx_loop_hook(utils->mlx, render, params);
@@ -333,6 +401,7 @@ int main(int ac, char **av)
 			// mlx_loop_hook(utils->mlx, render, params);
 			// mlx_loop_hook(utils->mlx, render, params);
 			// mlx_loop_hook(utils->mlx, render, params);
+			// render(params);
 			mlx_loop(utils->mlx);
 		}
 	}

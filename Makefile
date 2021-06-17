@@ -15,7 +15,7 @@ $(LIB):
 	mv libft/$(LIB) .
 
 $(NAME):	$(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIB) -lmlx -framework OpenGL -framework AppKit -g -fsanitize=address  -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIB) -lmlx -framework OpenGL -framework AppKit -g -fsanitize=address -o $(NAME)
 
 %.o:	%.c
 	$(CC) $(CFLAGS) -c $< -Ilibft/

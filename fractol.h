@@ -50,13 +50,11 @@ typedef struct	s_display
 
 typedef struct	s_coor
 {
-	int	xdefault;
-	int	ydefault;
+	int16_t	xdefault;
+	int16_t	ydefault;
 	double	x;
 	double	y;
 	int		color;
-	int		Cx;
-	int		Cy;
 }				t_coor;
 
 typedef struct	s_complex
