@@ -89,5 +89,22 @@ typedef struct	s_params
 
 t_image		*init_image(t_mlx *utils);
 t_display	*move_display(t_display *display, int hori, int vert);
+t_coor		**init_coor(t_display *display);
+t_display	*init_display(t_mlx *utils);
+t_mlx		*init_utils(void);
+void		firstinit(t_params *params, char *name);
+t_display	*move_display(t_display *display, int hori, int vert);
+void		mandlebrotloop(int i, t_display *display, t_coor **coor);
+int			julia(t_image *img, t_display *display, t_coor **coor);
+void		julialoop(int i, t_image *img, t_display *display, t_coor **coor);
+int			mandlebrot(t_image *img, t_display *display, t_coor **coor);
+void		mandlebrotloop(int i, t_display *display, t_coor **coor);
+t_display	*move_display(t_display *display, int hori, int vert);
+int			isincircle(int x, int y, t_display *display);
+void		ft_putpixel(t_image *img, int x, int y, int color);
+int			render(t_params *params);
+void		arrowhandler(int key, t_params *params);
+int			keyhandler(int key, t_params *params);
+int			scrollhandler(int button, int x, int y, t_params *params);
 
 #endif
