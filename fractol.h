@@ -18,6 +18,12 @@
 # include "mlx.h"
 # include <stdio.h>
 
+# define WIDTH 640
+# define HEIGHT 480
+# define RIGHT_ARROW 124
+# define LEFT_ARROW 123
+# define UP_ARROW 126
+# define DOWN_ARROW 125
 typedef struct	s_mlx {
 	void	*mlx;
 	void	*win;
@@ -46,6 +52,7 @@ typedef struct	s_display
 	int	radius;
 	double	xinc;
 	double	yinc;
+	double	zoom;
 }				t_display;
 
 typedef struct	s_coor
@@ -80,6 +87,7 @@ typedef struct	s_params
 	t_display	*display;
 }				t_params;
 
-t_image	*init_image(t_mlx *utils);
+t_image		*init_image(t_mlx *utils);
+t_display	*move_display(t_display *display, int hori, int vert);
 
 #endif
