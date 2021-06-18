@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 18:55:39 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/06/18 18:58:27 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/06/18 20:05:00 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,9 @@
 t_coor	**init_coor(t_display *display)
 {
 	t_coor	**coor;
-	int		y;
-	int		x;
-	int		i;
 
 	coor = ft_calloc(WIDTH * HEIGHT, sizeof (t_coor *));
-	i = 0;
-	y = 0;
-	while (y < HEIGHT)
-	{
-		x = 0;
-		while (x < WIDTH)
-		{
-			coor[i] = ft_calloc(1, sizeof (t_coor));
-			coor[i]->xdefault = x;
-			coor[i]->ydefault = y;
-			coor[i]->x = ((double)x - \
-			(double)display->xmid) / display->graduationlen;
-			coor[i]->y = ((double)y - \
-			(double)display->ymid) / display->graduationlen;
-			coor[i]->color = 0x00FFFFFF;
-			i++;
-			x++;
-		}
-		y++;
-	}
+	createcoor(coor, display);
 	return (coor);
 }
 

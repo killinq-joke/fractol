@@ -1,6 +1,6 @@
 CC		=	gcc
 CFLAGS	=	-Wall -Wextra -Werror
-SRCS	=	main.c inits.c display.c handlers.c print.c
+SRCS	=	main.c inits.c display.c handlers.c print.c utils.c
 OBJS	=	$(SRCS:c=o)
 NAME	=	fractol
 LIB		=	libft.a
