@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/12 21:11:30 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/06/18 20:05:29 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/06/19 14:06:13 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,5 +91,10 @@ int			render(t_params *params);
 void		arrowhandler(int key, t_params *params);
 int			keyhandler(int key, t_params *params);
 int			scrollhandler(int button, int x, int y, t_params *params);
+void		createcoor(t_coor **coor, t_display *display);
+void		freer(t_params *params);
+int			killwindow(t_params *params);
+int			ft_isfloat(char *str);
+int			ft_countchar(char *str, char c);
 
 #endif

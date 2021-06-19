@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 19:47:51 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/06/18 19:48:10 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/06/18 20:38:07 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,7 @@ int	keyhandler(int key, t_params *params)
 		arrowhandler(key, params);
 	if (key == 53)
 	{
-		mlx_destroy_image(params->utils->mlx, params->fractol->img);
-		mlx_destroy_window(params->utils->mlx, params->utils->win);
-		free(params->utils);
-		free(params->fractol);
-		free(params);
-		exit(1);
+		killwindow(params);
 	}
 	return (1);
 }
