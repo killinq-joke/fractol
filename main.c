@@ -45,8 +45,6 @@ int	ft_countchar(char *str, char c)
 	return (count);
 }
 
-
-
 void	floatcheck(int ac, char **av, t_params *params)
 {
 	if (ac == 4 && ft_isfloat(av[2]) && ft_isfloat(av[3]))
