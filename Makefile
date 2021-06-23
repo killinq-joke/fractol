@@ -7,8 +7,11 @@ LIB		=	libft.a
 LIBSRCS	=	libft/*.c
 LIBOBJS	=	libft/*.o
 
+
 .PHONY:	all
 all:	$(LIB) $(NAME)
+
+bonus:	all
 
 $(LIB):
 	make -C libft/

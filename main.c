@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/12 21:04:30 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/06/14 17:43:31y ztouzri          ###   ########.fr       */
+/*   Updated: 2021/06/23 14:14:31 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,7 @@ int	main(int ac, char **av)
 			params = ft_calloc(1, sizeof (t_params));
 			firstinit(params, av[1]);
 			if (ft_strcmp(av[1], "julia") == 0)
-			{
 				floatcheck(ac, av, params);
-			}
 			mlx_hook(params->utils->win, 2, 1L << 0, keyhandler, params);
 			mlx_hook(params->utils->win, 4, 1L << 2, scrollhandler, params);
 			mlx_hook(params->utils->win, 17, 1L << 0, killwindow, params);
